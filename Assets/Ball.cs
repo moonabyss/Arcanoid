@@ -4,29 +4,28 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour {
 
-    private Rigidbody rb;
-    private Vector3 oldVelocity;
+    private Rigidbody2D rb;
+    public Vector2 BallVelocity { get; private set;  }
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
     {
-        rb = GetComponent<Rigidbody>();
-	}
+        rb = GetComponent<Rigidbody2D>();
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
-		
-	}
+
+    }
 
     void FixedUpdate()
     {
-        oldVelocity = rb.velocity;
+        if (rb.velocity != Vector2.zero)
+        {
+            BallVelocity = rb.velocity;
+        }
+        
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        ContactPoint contact = collision.contacts[0];
-        rb.velocity = Vector3.Reflect(oldVelocity, contact.normal);
-    }
 }
