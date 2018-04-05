@@ -18,8 +18,7 @@ public class Cell : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        ContactPoint2D contact = collision.contacts[0];
-        if (contact.collider.tag == "Ball")
+        if (collision.collider.tag == "Ball")
         {
             Destroy(gameObject);
         }

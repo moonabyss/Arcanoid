@@ -9,7 +9,7 @@ public class Carete : MonoBehaviour {
     private Rigidbody2D rb;
 
 	// Use this for initialization
-	void Start ()
+	void OnEnable()
     {
         rb = ball.GetComponent<Rigidbody2D>();
 	}
@@ -43,15 +43,6 @@ public class Carete : MonoBehaviour {
 
                 GameManager.instance.ShowCursor(false);
             } 
-        }
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        ContactPoint2D contact = collision.contacts[0];
-        if (contact.collider.tag == "Wall")
-        {
-
         }
     }
 
