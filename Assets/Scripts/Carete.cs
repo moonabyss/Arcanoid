@@ -27,7 +27,14 @@ public class Carete : MonoBehaviour {
             if (rb.velocity == Vector2.zero)
             {
                 float angle = Vector2.Angle(Camera.main.ScreenToWorldPoint(Input.mousePosition) - ball.transform.position, new Vector2(1, 0));
-                print(angle);
+                if (angle <= 90 && angle >= 80)
+                {
+                    angle -= Random.Range(5f, 10f);
+                }
+                else if (angle >= 90 && angle <= 100)
+                {
+                    angle += Random.Range(5f, 10f);
+                }
                 Vector2 vector = (Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
 
                 ball.transform.SetParent(null);
@@ -42,13 +49,7 @@ public class Carete : MonoBehaviour {
     void OnCollisionEnter2D(Collision2D collision)
     {
         ContactPoint2D contact = collision.contacts[0];
-        if (contact.collider.tag == "Ball")
-        {
-            Collider2D collider = contact.collider;
-            Rigidbody2D rbCollider = collider.GetComponent<Rigidbody2D>();
-            rbCollider.velocity = Vector2.Reflect(collider.GetComponent<Ball>().BallVelocity, contact.normal);
-        }
-        else if (contact.collider.tag == "Wall")
+        if (contact.collider.tag == "Wall")
         {
 
         }

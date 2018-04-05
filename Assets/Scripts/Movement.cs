@@ -18,18 +18,16 @@ public class Movement : MonoBehaviour {
 
     private void Update()
     {
-        playerPosition = transform.position;
+        float x = Input.GetAxis("Horizontal");
+        Vector3 playerPosition = transform.position;
+        playerPosition.x += x * acceleration;
         playerPosition.x = Mathf.Clamp(playerPosition.x, minX, maxX);
-        print(playerPosition.x);
         transform.position = playerPosition;
     }
 
     // Update is called once per frame
     void FixedUpdate ()
     {
-        float x = Input.GetAxis("Horizontal");
-        Vector3 playerPosition = transform.position;
-        playerPosition.x += x * acceleration;
-        transform.position = playerPosition;
+        
 	}
 }

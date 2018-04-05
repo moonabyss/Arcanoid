@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
 
     //public Texture2D cursor;
     public GameObject cursor;
+    public GameObject cell;
 
     private void Awake()
     {
@@ -26,6 +27,11 @@ public class GameManager : MonoBehaviour {
     {
         //Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
         Cursor.visible = false;
+
+        for (int x = -8; x <= 8; x++)
+        {
+            Instantiate(cell, new Vector3((float)x, 3, 0), Quaternion.identity);
+        }
     }
 	
 	// Update is called once per frame

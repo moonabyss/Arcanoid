@@ -21,9 +21,6 @@ public class Cell : MonoBehaviour {
         ContactPoint2D contact = collision.contacts[0];
         if (contact.collider.tag == "Ball")
         {
-            Collider2D collider = contact.collider;
-            Rigidbody2D rbCollider = collider.GetComponent<Rigidbody2D>();
-            rbCollider.velocity = Vector2.Reflect(collider.GetComponent<Ball>().BallVelocity, contact.normal);
             Destroy(gameObject);
         }
     }
