@@ -87,7 +87,7 @@
     <Compile Include="Assets\Scripts\GameCursor.cs" />
     <Compile Include="Assets\Scripts\Movement.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
-    <Compile Include="Assets\Scripts\WallBlock.cs" />
+    <Compile Include="Assets\Scripts\Reflect.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

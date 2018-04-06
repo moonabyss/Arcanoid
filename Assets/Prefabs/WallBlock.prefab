@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4451258373367518}
   - component: {fileID: 212112361849878710}
   - component: {fileID: 61016751967830290}
-  - component: {fileID: 114703715402594166}
+  - component: {fileID: 114881149438457250}
   m_Layer: 0
   m_Name: WallBlock
   m_TagString: Wall
@@ -50,7 +50,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1631520540820790}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: cd604483907c82f498733b6a9af0c294, type: 2}
+  m_Material: {fileID: 6200000, guid: 2d32182cfb1516d4280c258d602371f5, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -67,7 +67,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
---- !u!114 &114703715402594166
+--- !u!114 &114881149438457250
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -75,7 +75,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1631520540820790}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d93898442292664bbd2039cbf0acd48, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a52739b24405eb4d9bdba4d601613fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &212112361849878710
