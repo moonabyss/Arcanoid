@@ -7,13 +7,12 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
 
-    public int CellCount { get; set; }
-
     //public Texture2D cursor;
     public GameObject cursor;
     public GameObject cell;
     public GameObject caretePrefab;
     public Text UiLives;
+    public Text UiScores;
     public GameObject InfoPanel;
 
     public int startLives = 3;
@@ -21,6 +20,9 @@ public class GameManager : MonoBehaviour {
     public Player player;
 
     private GameObject carete;
+
+    private int cellCount = 0;
+    private int score = 0;
 
     private void Awake()
     {
@@ -43,14 +45,14 @@ public class GameManager : MonoBehaviour {
         for (int x = -5; x <= 5; x++)
         {
             Instantiate(cell, new Vector3((float)x, -1, 0), Quaternion.identity);
-            CellCount++;
+            cellCount++;
         }
 
         player = new Player(startLives);
 
         player.OnLivesChanged += PlayersLivesChanged;
         Cell.OnCellDestroyed += CellDestroyed;
-        UiLives.text = "Lives: " + player.Lives;
+        UiLives.text = "Lives\n" + player.Lives;
         PlayerAtInitialPosition();
     }
 	
@@ -70,7 +72,7 @@ public class GameManager : MonoBehaviour {
 
     private void PlayersLivesChanged()
     {
-        UiLives.text = "Lives: " + player.Lives;
+        UiLives.text = "Lives\n" + player.Lives;
 
         if (player.Balls == 0)
         {
@@ -85,21 +87,21 @@ public class GameManager : MonoBehaviour {
         if (player.Balls == 0 && player.Lives == 0)
         {
             GameOver();
-            print(player.Lives);
         }
     }
 
     private void PlayerAtInitialPosition()
     {
-        carete =  Instantiate(caretePrefab, new Vector3(0, -10, 0), Quaternion.identity);
+        carete =  Instantiate(caretePrefab, new Vector3(0, -11, 0), Quaternion.identity);
         player.BallAdded(1);
         ShowCursor(true);
     }
 
-    private void CellDestroyed()
+    private void CellDestroyed(int score)
     {
-        CellCount--;
-        if (CellCount == 0)
+        cellCount--;
+        ScoreChanged(score);
+        if (cellCount == 0)
         {
             LevelCompleted();
         }
@@ -120,5 +122,11 @@ public class GameManager : MonoBehaviour {
     {
         InfoPanel.GetComponentInChildren<Text>().text = "Game Over!";
         InfoPanel.SetActive(true);
+    }
+
+    private void ScoreChanged(int score)
+    {
+        this.score += score;
+        UiScores.text = "Score\n" + this.score.ToString();
     }
 }

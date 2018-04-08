@@ -5,7 +5,7 @@ using UnityEngine;
 public class Movement : MonoBehaviour {
 
     [Range(0.1f,0.5f)]
-    public float acceleration;
+    public float acceleration = .4f;
     public float minX = -7.25f;
     public float maxX = 7.25f;
 
@@ -18,16 +18,13 @@ public class Movement : MonoBehaviour {
 
     private void Update()
     {
-        float x = Input.GetAxis("Horizontal");
+        //float x = Input.GetAxis("Horizontal");
+        //playerPosition.x += x * acceleration;
+
         Vector3 playerPosition = transform.position;
-        playerPosition.x += x * acceleration;
+        playerPosition.x = Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, playerPosition.y)).x;
         playerPosition.x = Mathf.Clamp(playerPosition.x, minX, maxX);
         transform.position = playerPosition;
     }
 
-    // Update is called once per frame
-    void FixedUpdate ()
-    {
-        
-	}
 }

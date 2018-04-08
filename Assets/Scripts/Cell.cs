@@ -5,13 +5,16 @@ using UnityEngine;
 public class Cell : MonoBehaviour {
     private int durability;
 
-    public delegate void CellDestroyed();
+    public int Score { get; private set; }
+
+    public delegate void CellDestroyed(int score);
     public static event CellDestroyed OnCellDestroyed;
 
     // Use this for initialization
     void Start ()
     {
         durability = 1;
+        Score = 10;
 	}
 	
 	// Update is called once per frame
@@ -28,7 +31,7 @@ public class Cell : MonoBehaviour {
             if (durability == 0)
             {
                 Destroy(gameObject);
-                OnCellDestroyed();
+                OnCellDestroyed(Score);
             }
         }
     }
