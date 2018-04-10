@@ -335,7 +335,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &228573903
 Transform:
   m_ObjectHideFlags: 0
@@ -1642,7 +1642,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursor: {fileID: 228573902}
-  cell: {fileID: 1712047457644528, guid: d7f329ceac0c85549b5d9625d4bc2900, type: 2}
+  cell_blue: {fileID: 1347289447101570, guid: 719538d55e491ad4c8225a777a3cb52a, type: 2}
+  cell_yellow: {fileID: 1301029899759900, guid: 7b68ee1994522f042bf51ff5f5696729,
+    type: 2}
+  cell_green: {fileID: 1644003133882490, guid: 1b32def228feae948be3e91545132346, type: 2}
+  cell_magenta: {fileID: 1329575625024788, guid: 626fdb06161209847855d0915e6c3f90,
+    type: 2}
+  cell_red: {fileID: 1710414362627210, guid: 8ceb6710f3ca5284a99f7ca91c06bf62, type: 2}
+  cell_gray: {fileID: 1042529153214904, guid: ded4a24c7cf064842a3afa9fd9cb824d, type: 2}
   caretePrefab: {fileID: 1277327055235322, guid: fa5035956026b5d4ea1111ac66ec22d6,
     type: 2}
   UiLives: {fileID: 686780393}

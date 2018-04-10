@@ -45,7 +45,7 @@ public class Reflect : MonoBehaviour {
             }
             contact.rigidbody.velocity = Vector2.Reflect(oldVelocity, contact.normal);
             GetComponent<Collider2D>().isTrigger = true;
-            Invoke("EnableCollider", 0.1f);
+            Invoke("EnableCollider", 0.05f);
         }
     }
 

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Cell : MonoBehaviour {
-    private int durability;
 
-    public int Score { get; private set; }
+    public int score = 5;
+    public int durability = 1;
 
     public delegate void CellDestroyed(int score);
     public static event CellDestroyed OnCellDestroyed;
@@ -13,8 +13,7 @@ public class Cell : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        durability = 1;
-        Score = 10;
+
 	}
 	
 	// Update is called once per frame
@@ -31,7 +30,7 @@ public class Cell : MonoBehaviour {
             if (durability == 0)
             {
                 Destroy(gameObject);
-                OnCellDestroyed(Score);
+                OnCellDestroyed(score);
             }
         }
     }

@@ -9,7 +9,12 @@ public class GameManager : MonoBehaviour {
 
     //public Texture2D cursor;
     public GameObject cursor;
-    public GameObject cell;
+    public GameObject cell_blue;
+    public GameObject cell_yellow;
+    public GameObject cell_green;
+    public GameObject cell_magenta;
+    public GameObject cell_red;
+    public GameObject cell_gray;
     public GameObject caretePrefab;
     public Text UiLives;
     public Text UiScores;
@@ -42,11 +47,7 @@ public class GameManager : MonoBehaviour {
         //Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
         Cursor.visible = false;
 
-        for (int x = -5; x <= 5; x++)
-        {
-            Instantiate(cell, new Vector3((float)x, -1, 0), Quaternion.identity);
-            cellCount++;
-        }
+        CreateLevel(1);
 
         player = new Player(startLives);
 
@@ -67,7 +68,8 @@ public class GameManager : MonoBehaviour {
 
     public void ShowCursor(bool mode)
     {
-        cursor.SetActive(mode);
+        //cursor.SetActive(mode);
+        cursor.SetActive(false);
     }
 
     private void PlayersLivesChanged()
@@ -128,5 +130,24 @@ public class GameManager : MonoBehaviour {
     {
         this.score += score;
         UiScores.text = "Score\n" + this.score.ToString();
+    }
+
+    private void CreateLevel(int level)
+    {
+        for (int x = -5; x <= 5; x++)
+        {
+            Instantiate(cell_gray, new Vector3((float)x, -1f, 0), Quaternion.identity);
+            cellCount++;
+            Instantiate(cell_red, new Vector3((float)x, -1.5f, 0), Quaternion.identity);
+            cellCount++;
+            Instantiate(cell_yellow, new Vector3((float)x, -2f, 0), Quaternion.identity);
+            cellCount++;
+            Instantiate(cell_magenta, new Vector3((float)x, -2.5f, 0), Quaternion.identity);
+            cellCount++;
+            Instantiate(cell_blue, new Vector3((float)x, -3f, 0), Quaternion.identity);
+            cellCount++;
+            Instantiate(cell_green, new Vector3((float)x, -3.5f, 0), Quaternion.identity);
+            cellCount++;
+        }
     }
 }
