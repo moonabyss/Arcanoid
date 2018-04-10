@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour {
     public GameObject cell_red;
     public GameObject cell_gray;
     public GameObject caretePrefab;
+    public ScoreAdd addScorePrefab;
     public Text UiLives;
     public Text UiScores;
     public GameObject InfoPanel;
@@ -83,7 +84,7 @@ public class GameManager : MonoBehaviour {
 
         if (player.Balls == 0 && player.Lives > 0)
         {
-            PlayerAtInitialPosition();
+            Invoke("PlayerAtInitialPosition", 1.5f);
         }
 
         if (player.Balls == 0 && player.Lives == 0)
@@ -99,10 +100,12 @@ public class GameManager : MonoBehaviour {
         ShowCursor(true);
     }
 
-    private void CellDestroyed(int score)
+    private void CellDestroyed(int score, Transform position)
     {
         cellCount--;
         ScoreChanged(score);
+        ScoreAdd go =  Instantiate(addScorePrefab, position.position + new Vector3(0, 0, -1), Quaternion.identity);
+        go.scoreText.text = GetSign(score) + score.ToString();
         if (cellCount == 0)
         {
             LevelCompleted();
@@ -140,14 +143,25 @@ public class GameManager : MonoBehaviour {
             cellCount++;
             Instantiate(cell_red, new Vector3((float)x, -1.5f, 0), Quaternion.identity);
             cellCount++;
-            Instantiate(cell_yellow, new Vector3((float)x, -2f, 0), Quaternion.identity);
+            Instantiate(cell_magenta, new Vector3((float)x, -2f, 0), Quaternion.identity);
             cellCount++;
-            Instantiate(cell_magenta, new Vector3((float)x, -2.5f, 0), Quaternion.identity);
+            Instantiate(cell_yellow, new Vector3((float)x, -2.5f, 0), Quaternion.identity);
             cellCount++;
             Instantiate(cell_blue, new Vector3((float)x, -3f, 0), Quaternion.identity);
             cellCount++;
             Instantiate(cell_green, new Vector3((float)x, -3.5f, 0), Quaternion.identity);
             cellCount++;
         }
+    }
+
+    private string GetSign(int value)
+    {
+        if (value > 0)
+            return "+";
+        else if (value < 0)
+            return "-";
+        else
+            return "";
+
     }
 }

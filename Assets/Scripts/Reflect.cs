@@ -26,22 +26,22 @@ public class Reflect : MonoBehaviour {
             // ball goes up
             if (oldVelocity.y > 0 && oldVelocity.y < 0.5)
             {
-                oldVelocity.y += .2f;
+                oldVelocity.y += .4f;
             }
             // ball goes down
             if (oldVelocity.y < 0 && oldVelocity.y > -0.5)
             {
-                oldVelocity.y -= .2f;
+                oldVelocity.y -= .4f;
             }
             // ball goes right
             if (oldVelocity.x > 0 && oldVelocity.x < 0.5)
             {
-                oldVelocity.x += .2f;
+                oldVelocity.x += .4f;
             }
             // ball goes left
             if (oldVelocity.x < 0 && oldVelocity.x > -0.5)
             {
-                oldVelocity.x -= .2f;
+                oldVelocity.x -= .4f;
             }
             contact.rigidbody.velocity = Vector2.Reflect(oldVelocity, contact.normal);
             GetComponent<Collider2D>().isTrigger = true;

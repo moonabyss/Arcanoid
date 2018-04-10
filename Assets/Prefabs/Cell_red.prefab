@@ -81,6 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 5
   durability: 1
+  scoreAdd: {fileID: 0}
 --- !u!114 &114128849043474344
 MonoBehaviour:
   m_ObjectHideFlags: 1

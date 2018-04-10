@@ -92,6 +92,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 5
   durability: 1
+  scoreAdd: {fileID: 0}
 --- !u!212 &212456333989639144
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -1652,6 +1652,8 @@ MonoBehaviour:
   cell_gray: {fileID: 1042529153214904, guid: ded4a24c7cf064842a3afa9fd9cb824d, type: 2}
   caretePrefab: {fileID: 1277327055235322, guid: fa5035956026b5d4ea1111ac66ec22d6,
     type: 2}
+  addScorePrefab: {fileID: 114064280182334052, guid: c879b4f1968d8704fa0d55c7416b36b2,
+    type: 2}
   UiLives: {fileID: 686780393}
   UiScores: {fileID: 578267235}
   InfoPanel: {fileID: 203777904}

@@ -81,6 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 5
   durability: 1
+  scoreAdd: {fileID: 1558338909074330, guid: c879b4f1968d8704fa0d55c7416b36b2, type: 2}
 --- !u!114 &114809947736344550
 MonoBehaviour:
   m_ObjectHideFlags: 1
