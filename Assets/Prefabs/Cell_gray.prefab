@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 95799642542174740}
   m_Layer: 0
   m_Name: Cell_gray
-  m_TagString: Untagged
+  m_TagString: Cell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,6 +110,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 15
   durability: 2
+  audioClipMain: {fileID: 8300000, guid: 8183e4f07b7b2e54bb74946484e4317b, type: 3}
+  audioClipAlt: {fileID: 8300000, guid: 13f0c87f797b879439c3532c83fae817, type: 3}
+  volume: 1
 --- !u!212 &212042423294271000
 SpriteRenderer:
   m_ObjectHideFlags: 1

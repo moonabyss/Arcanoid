@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Reflect : MonoBehaviour {
 
+    private const float VELOCITY = 2f;
+
     Rigidbody2D rb;
 
 	// Use this for initialization
@@ -26,22 +28,22 @@ public class Reflect : MonoBehaviour {
             // ball goes up
             if (oldVelocity.y > 0 && oldVelocity.y < 0.5)
             {
-                oldVelocity.y += .4f;
+                oldVelocity.y += VELOCITY;
             }
             // ball goes down
             if (oldVelocity.y < 0 && oldVelocity.y > -0.5)
             {
-                oldVelocity.y -= .4f;
+                oldVelocity.y -= VELOCITY;
             }
             // ball goes right
             if (oldVelocity.x > 0 && oldVelocity.x < 0.5)
             {
-                oldVelocity.x += .4f;
+                oldVelocity.x += VELOCITY;
             }
             // ball goes left
             if (oldVelocity.x < 0 && oldVelocity.x > -0.5)
             {
-                oldVelocity.x -= .4f;
+                oldVelocity.x -= VELOCITY;
             }
             contact.rigidbody.velocity = Vector2.Reflect(oldVelocity, contact.normal);
             GetComponent<Collider2D>().isTrigger = true;

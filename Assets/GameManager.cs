@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+enum GameMode { PLAYING, GAMEOVER}
+
 public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
+    private static GameMode gameMode;
 
     public bool InPause { get; private set; }
 
@@ -32,7 +35,12 @@ public class GameManager : MonoBehaviour {
     public Player player;
     public Vector2 lastMousePosition;
 
+    public AudioClip ballLost;
+    public AudioClip gameOver;
+    public AudioClip newLevel;
+
     private GameObject carete;
+    private AudioSource audioPlayer;
 
     private int cellCount = 0;
     private int score = 0;
@@ -52,6 +60,8 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        audioPlayer = GetComponent<AudioSource>();
+
         InPause = false;
         //Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
         Cursor.visible = false;
@@ -64,6 +74,8 @@ public class GameManager : MonoBehaviour {
         Cell.OnCellDestroyed += CellDestroyed;
         UiLives.text = "Life\n" + player.Lives;
         PlayerAtInitialPosition();
+
+        gameMode = GameMode.PLAYING;
 
         Button[] buttons = PauseMenu.GetComponentsInChildren<Button>();
         foreach (Button button in buttons)
@@ -111,6 +123,8 @@ public class GameManager : MonoBehaviour {
 
         if (player.Balls == 0)
         {
+            audioPlayer.clip = ballLost;
+            audioPlayer.Play();
             Destroy(carete);
         }
 
@@ -121,6 +135,9 @@ public class GameManager : MonoBehaviour {
 
         if (player.Balls == 0 && player.Lives == 0)
         {
+            gameMode = GameMode.GAMEOVER;
+            audioPlayer.clip = gameOver;
+            audioPlayer.Play();
             GameOver();
         }
     }
@@ -157,8 +174,6 @@ public class GameManager : MonoBehaviour {
 
     private void GameOver()
     {
-        //InfoPanel.GetComponentInChildren<Text>().text = "Game Over!";
-        //InfoPanel.SetActive(true);
         GameOverMenu.SetActive(true);
         Cursor.visible = true;
     }
@@ -186,6 +201,8 @@ public class GameManager : MonoBehaviour {
             Instantiate(cell_green, new Vector3((float)x, -3.5f, 0), Quaternion.identity, levelHandler);
             cellCount++;
         }
+        audioPlayer.clip = newLevel;
+        audioPlayer.Play();
     }
 
     private string GetSign(int value)
@@ -201,8 +218,11 @@ public class GameManager : MonoBehaviour {
 
     private void ShowPauseMenu(bool display)
     {
-        PauseMenu.SetActive(display);
-        Cursor.visible = display;
+        if (gameMode == GameMode.PLAYING)
+        {
+            PauseMenu.SetActive(display);
+            Cursor.visible = display;
+        }
     }
 
     private void SwitchPause()
@@ -236,6 +256,7 @@ public class GameManager : MonoBehaviour {
         player.AddLife(startLives);
         score = 0;
         ScoreChanged(score);
+        gameMode = GameMode.PLAYING;
     }
 
     private void ClearLevel()

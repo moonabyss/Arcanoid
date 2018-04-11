@@ -11,6 +11,10 @@ public class Cell : MonoBehaviour {
 
     public delegate void CellDestroyed(int score, Transform position);
     public static event CellDestroyed OnCellDestroyed;
+    public AudioClip audioClipMain;
+    public AudioClip audioClipAlt;
+    [Range(0f, 1f)]
+    public float volume = 1f;
 
     // Use this for initialization
     void Start ()
@@ -38,6 +42,18 @@ public class Cell : MonoBehaviour {
                 OnCellDestroyed(score, transform);
                 Destroy(gameObject);
             }
+        }
+    }
+
+    public AudioClip GetAudioClip()
+    {
+        if (durability > 1)
+        {
+            return audioClipAlt;
+        }
+        else
+        {
+            return audioClipMain;
         }
     }
 }

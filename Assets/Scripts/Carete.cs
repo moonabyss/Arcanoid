@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Carete : MonoBehaviour {
     public GameObject ball;
+    public AudioClip audioClipMain;
+    [Range(0f, 1f)]
+    public float volume = 1f;
+
     public float thrust = 400;
 
     private Rigidbody2D rb;
@@ -43,11 +47,17 @@ public class Carete : MonoBehaviour {
                 ball.transform.SetParent(null);
                 // Cursor position to angle. Angle to vector2
                 rb.AddForce(new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad)) * thrust);
+                GetComponent<AudioSource>().Play();
 
 
                 GameManager.instance.ShowCursor(false);
             } 
         }
+    }
+
+    public AudioClip GetAudioClip()
+    {
+        return audioClipMain;
     }
 
 }

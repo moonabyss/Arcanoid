@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114809947736344550}
   m_Layer: 0
   m_Name: Cell_green
-  m_TagString: Untagged
+  m_TagString: Cell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,7 +81,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 5
   durability: 1
-  scoreAdd: {fileID: 1558338909074330, guid: c879b4f1968d8704fa0d55c7416b36b2, type: 2}
+  audioClipMain: {fileID: 8300000, guid: 8183e4f07b7b2e54bb74946484e4317b, type: 3}
+  audioClipAlt: {fileID: 0}
+  volume: 1
 --- !u!114 &114809947736344550
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\GameManager.cs" />
+    <Compile Include="Assets\Scripts\AudioHandler.cs" />
     <Compile Include="Assets\Scripts\Ball.cs" />
     <Compile Include="Assets\Scripts\Carete.cs" />
     <Compile Include="Assets\Scripts\Cell.cs" />
