@@ -31,6 +31,12 @@ public class Player {
         Balls += balls;
     }
 
+    public void AddLife(int count)
+    {
+        this.Lives += count;
+        OnLivesChanged();
+    }
+
     private void DecreaseLives()
     {
         Lives--;

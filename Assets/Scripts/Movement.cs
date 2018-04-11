@@ -13,6 +13,8 @@ public class Movement : MonoBehaviour {
 
     Vector2 playerPosition;
 
+    private Vector2 lastMousePosition;
+
     // Use this for initialization
     void Start ()
     {
@@ -22,19 +24,25 @@ public class Movement : MonoBehaviour {
 
     private void Update()
     {
-        Vector3 playerPosition = transform.position;
+        if (!GameManager.instance.InPause)
+        {
 
-        // mouse control
-        playerPosition.x = Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, playerPosition.y)).x;
+            Vector3 playerPosition = transform.position;
 
-        /*
-        // keyboard control
-        float x = Input.GetAxis("Horizontal");
-        playerPosition.x += x * acceleration;
-        */
+            // mouse control
+            //playerPosition.x = Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, playerPosition.y)).x;
+            playerPosition.x += Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, playerPosition.y)).x - lastMousePosition.x;
 
-        playerPosition.x = Mathf.Clamp(playerPosition.x, minX, maxX);
-        transform.position = playerPosition;
+            /*
+            // keyboard control
+            float x = Input.GetAxis("Horizontal");
+            playerPosition.x += x * acceleration;
+            */
+
+            playerPosition.x = Mathf.Clamp(playerPosition.x, minX, maxX);
+            transform.position = playerPosition;
+        }
+        lastMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
 }

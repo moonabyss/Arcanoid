@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
     public static GameManager instance;
+
+    public bool InPause { get; private set; }
 
     //public Texture2D cursor;
     public GameObject cursor;
@@ -20,10 +23,14 @@ public class GameManager : MonoBehaviour {
     public Text UiLives;
     public Text UiScores;
     public GameObject InfoPanel;
+    public GameObject PauseMenu;
+    public GameObject GameOverMenu;
+    public Transform levelHandler;
 
     public int startLives = 3;
 
     public Player player;
+    public Vector2 lastMousePosition;
 
     private GameObject carete;
 
@@ -45,6 +52,7 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        InPause = false;
         //Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
         Cursor.visible = false;
 
@@ -54,16 +62,40 @@ public class GameManager : MonoBehaviour {
 
         player.OnLivesChanged += PlayersLivesChanged;
         Cell.OnCellDestroyed += CellDestroyed;
-        UiLives.text = "Lives\n" + player.Lives;
+        UiLives.text = "Life\n" + player.Lives;
         PlayerAtInitialPosition();
-    }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-        if (Input.GetKey("escape"))
+
+        Button[] buttons = PauseMenu.GetComponentsInChildren<Button>();
+        foreach (Button button in buttons)
         {
-            Application.Quit();
+            switch (button.name)
+            {
+                case "ContinueButton" : button.onClick.AddListener(delegate { SwitchPause(); }); break;
+                case "ExitButton": button.onClick.AddListener(delegate { Quit(); }); break;
+                default: break;
+            }
+        }
+
+        buttons = GameOverMenu.GetComponentsInChildren<Button>();
+        foreach (Button button in buttons)
+        {
+            switch (button.name)
+            {
+                case "PlayAgainButton": button.onClick.AddListener(delegate { PlayAgain(); }); break;
+                case "ExitButton": button.onClick.AddListener(delegate { Quit(); }); break;
+                default: break;
+            }
+        }
+
+    }
+
+    // Update is called once per frame
+    void Update ()
+    {
+        if (Input.GetKeyDown("escape"))
+        {
+            SwitchPause();
+            //Application.Quit();
         }
 	}
 
@@ -75,7 +107,7 @@ public class GameManager : MonoBehaviour {
 
     private void PlayersLivesChanged()
     {
-        UiLives.text = "Lives\n" + player.Lives;
+        UiLives.text = "Life\n" + player.Lives;
 
         if (player.Balls == 0)
         {
@@ -97,7 +129,7 @@ public class GameManager : MonoBehaviour {
     {
         carete =  Instantiate(caretePrefab, new Vector3(0, -11, 0), Quaternion.identity);
         player.BallAdded(1);
-        ShowCursor(true);
+        //ShowCursor(true);
     }
 
     private void CellDestroyed(int score, Transform position)
@@ -125,8 +157,10 @@ public class GameManager : MonoBehaviour {
 
     private void GameOver()
     {
-        InfoPanel.GetComponentInChildren<Text>().text = "Game Over!";
-        InfoPanel.SetActive(true);
+        //InfoPanel.GetComponentInChildren<Text>().text = "Game Over!";
+        //InfoPanel.SetActive(true);
+        GameOverMenu.SetActive(true);
+        Cursor.visible = true;
     }
 
     private void ScoreChanged(int score)
@@ -139,17 +173,17 @@ public class GameManager : MonoBehaviour {
     {
         for (int x = -5; x <= 5; x++)
         {
-            Instantiate(cell_gray, new Vector3((float)x, -1f, 0), Quaternion.identity);
+            Instantiate(cell_gray, new Vector3((float)x, -1f, 0), Quaternion.identity, levelHandler);
             cellCount++;
-            Instantiate(cell_red, new Vector3((float)x, -1.5f, 0), Quaternion.identity);
+            Instantiate(cell_red, new Vector3((float)x, -1.5f, 0), Quaternion.identity, levelHandler);
             cellCount++;
-            Instantiate(cell_magenta, new Vector3((float)x, -2f, 0), Quaternion.identity);
+            Instantiate(cell_magenta, new Vector3((float)x, -2f, 0), Quaternion.identity, levelHandler);
             cellCount++;
-            Instantiate(cell_yellow, new Vector3((float)x, -2.5f, 0), Quaternion.identity);
+            Instantiate(cell_yellow, new Vector3((float)x, -2.5f, 0), Quaternion.identity, levelHandler);
             cellCount++;
-            Instantiate(cell_blue, new Vector3((float)x, -3f, 0), Quaternion.identity);
+            Instantiate(cell_blue, new Vector3((float)x, -3f, 0), Quaternion.identity, levelHandler);
             cellCount++;
-            Instantiate(cell_green, new Vector3((float)x, -3.5f, 0), Quaternion.identity);
+            Instantiate(cell_green, new Vector3((float)x, -3.5f, 0), Quaternion.identity, levelHandler);
             cellCount++;
         }
     }
@@ -163,5 +197,52 @@ public class GameManager : MonoBehaviour {
         else
             return "";
 
+    }
+
+    private void ShowPauseMenu(bool display)
+    {
+        PauseMenu.SetActive(display);
+        Cursor.visible = display;
+    }
+
+    private void SwitchPause()
+    {
+        InPause = !InPause;
+        Time.timeScale = InPause ? 0 : 1;
+
+        if (InPause)
+        {
+            ShowPauseMenu(true);
+        }
+        else
+        {
+            ShowPauseMenu(false);
+        }
+    }
+
+    private void Quit()
+    {
+        Application.Quit();
+    }
+
+    private void PlayAgain()
+    {
+        ClearLevel();
+        cellCount = 0;
+        CreateLevel(1);
+        GameOverMenu.SetActive(false);
+        Cursor.visible = false;
+        PlayerAtInitialPosition();
+        player.AddLife(startLives);
+        score = 0;
+        ScoreChanged(score);
+    }
+
+    private void ClearLevel()
+    {
+        for (int i = 0; i < levelHandler.childCount; i++)
+        {
+            Destroy(levelHandler.GetChild(i).gameObject);
+        }
     }
 }
