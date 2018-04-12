@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-enum GameMode { PLAYING, GAMEOVER, LEVELFINISHED}
+public enum GameMode { PLAYING, GAMEOVER, LEVEL_FINISHED, BALL_LOST}
 
 public class GameManager : MonoBehaviour {
 
@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour {
     public ScoreAdd addScorePrefab;
     public Text UiLives;
     public Text UiScores;
-    public GameObject InfoPanel;
+    public Text UiRound;
     public GameObject PauseMenu;
     public GameObject GameOverMenu;
     public Transform levelHandler;
@@ -36,14 +36,13 @@ public class GameManager : MonoBehaviour {
     public int startLives = 3;
 
     public Player player;
-    public Vector2 lastMousePosition;
 
     public AudioClip ballLost;
     public AudioClip gameOver;
     public AudioClip newLevel;
 
     private GameObject carete;
-    private AudioSource audioPlayer;
+    public GameObject soundPrefab;
 
     private int cellCount = 0;
     private int score = 0;
@@ -63,23 +62,6 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        audioPlayer = GetComponent<AudioSource>();
-
-        InPause = false;
-        //Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
-        Cursor.visible = false;
-
-        CreateLevel();
-
-        player = new Player(startLives);
-
-        player.OnLivesChanged += PlayersLivesChanged;
-        Cell.OnCellDestroyed += CellDestroyed;
-        UiLives.text = "Life\n" + player.Lives;
-        PlayerAtInitialPosition();
-
-        gameMode = GameMode.PLAYING;
-
         Button[] buttons = PauseMenu.GetComponentsInChildren<Button>();
         foreach (Button button in buttons)
         {
@@ -96,11 +78,18 @@ public class GameManager : MonoBehaviour {
         {
             switch (button.name)
             {
-                case "PlayAgainButton": button.onClick.AddListener(delegate { PlayAgain(); }); break;
+                case "PlayAgainButton": button.onClick.AddListener(delegate { PlayNewGame(); }); break;
                 case "ExitButton": button.onClick.AddListener(delegate { Quit(); }); break;
                 default: break;
             }
         }
+
+        player = new Player();
+
+        player.OnLivesChanged += PlayersLivesChanged;
+        Cell.OnCellDestroyed += CellDestroyed;
+
+        PlayNewGame();
 
     }
 
@@ -110,9 +99,13 @@ public class GameManager : MonoBehaviour {
         if (Input.GetKeyDown("escape"))
         {
             SwitchPause();
-            //Application.Quit();
         }
 	}
+
+    public static GameMode GetGameMode()
+    {
+        return gameMode;
+    }
 
     public void ShowCursor(bool mode)
     {
@@ -126,21 +119,26 @@ public class GameManager : MonoBehaviour {
 
         if (player.Balls == 0)
         {
-            audioPlayer.clip = ballLost;
-            audioPlayer.Play();
-            Destroy(carete, audioPlayer.clip.length);
+            gameMode = GameMode.BALL_LOST;
+            GameObject sound = Instantiate(soundPrefab, transform);
+            sound.GetComponent<AudioSource>().clip = ballLost;
+            sound.GetComponent<AudioSource>().Play();
+            Destroy(sound, sound.GetComponent<AudioSource>().clip.length);
+            Destroy(carete, sound.GetComponent<AudioSource>().clip.length);
         }
 
         if (player.Balls == 0 && player.Lives > 0)
         {
-            Invoke("PlayerAtInitialPosition", 1.5f);
+            Invoke("PlayerAtInitialPosition", 2f);
         }
 
         if (player.Balls == 0 && player.Lives == 0)
         {
             gameMode = GameMode.GAMEOVER;
-            audioPlayer.clip = gameOver;
-            audioPlayer.Play();
+            GameObject sound = Instantiate(soundPrefab, transform);
+            sound.GetComponent<AudioSource>().clip = gameOver;
+            sound.GetComponent<AudioSource>().Play();
+            Destroy(sound, sound.GetComponent<AudioSource>().clip.length);
             GameOver();
         }
     }
@@ -149,6 +147,7 @@ public class GameManager : MonoBehaviour {
     {
         carete =  Instantiate(caretePrefab, new Vector3(0, -11, 0), Quaternion.identity);
         player.BallAdded(1);
+        Invoke("SetGameModePlaying", 1f);
         //ShowCursor(true);
     }
 
@@ -173,10 +172,6 @@ public class GameManager : MonoBehaviour {
             Destroy(ball);
         }
         Destroy(carete);
-        InfoPanel.GetComponentInChildren<Text>().text = "Level Completed!";
-
-        //gameMode = GameMode.LEVELFINISHED;
-        InfoPanel.SetActive(true);
 
         if (round > MAX_ROUND)
         {
@@ -203,15 +198,19 @@ public class GameManager : MonoBehaviour {
 
     private void CreateLevel()
     {
-        switch (GameManager.round)
+        switch (round)
         {
-            case 1: Level_02(); break;
+            case 1: Level_01(); break;
             case 2: Level_02(); break;
             default:            break;
         }
+        ShowRound();
         gameMode = GameMode.PLAYING;
-        audioPlayer.clip = newLevel;
-        audioPlayer.Play();
+        GameObject sound = Instantiate(soundPrefab, transform);
+        sound.GetComponent<AudioSource>().clip = newLevel;
+        sound.GetComponent<AudioSource>().Play();
+        Destroy(sound, sound.GetComponent<AudioSource>().clip.length);
+        Invoke("HideRound", 3f);
     }
 
     private string GetSign(int value)
@@ -254,11 +253,27 @@ public class GameManager : MonoBehaviour {
         Application.Quit();
     }
 
-    private void PlayAgain()
+    private void SetGameModePlaying()
+    {
+        gameMode = GameMode.PLAYING;
+    }
+
+    private void ShowRound()
+    {
+        UiRound.text = "ROUND  " + round;
+        UiRound.gameObject.SetActive(true);
+    }
+
+    private void HideRound()
+    {
+        UiRound.gameObject.SetActive(false);
+    }
+
+    private void PlayNewGame()
     {
         ClearLevel();
         cellCount = 0;
-        GameManager.round = 1;
+        round = 1;
         CreateLevel();
         GameOverMenu.SetActive(false);
         Cursor.visible = false;

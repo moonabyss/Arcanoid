@@ -13,8 +13,6 @@ public class Cell : MonoBehaviour {
     public static event CellDestroyed OnCellDestroyed;
     public AudioClip audioClipMain;
     public AudioClip audioClipAlt;
-    [Range(0f, 1f)]
-    public float volume = 1f;
 
     // Use this for initialization
     void Start ()

@@ -7,8 +7,6 @@ public class Carete : MonoBehaviour {
     public AudioClip audioClipMain;
     public AudioClip audioClipLaunch;
     public GameObject soundPrefab;
-    [Range(0f, 1f)]
-    public float volume = 1f;
 
     public float thrust = 400;
 
