@@ -4,12 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-enum GameMode { PLAYING, GAMEOVER}
+enum GameMode { PLAYING, GAMEOVER, LEVELFINISHED}
 
 public class GameManager : MonoBehaviour {
 
+    private const int MAX_ROUND = 2;
+
     public static GameManager instance;
     private static GameMode gameMode;
+    private static int round = 1;
 
     public bool InPause { get; private set; }
 
@@ -66,7 +69,7 @@ public class GameManager : MonoBehaviour {
         //Cursor.SetCursor(cursor, Vector2.zero, CursorMode.Auto);
         Cursor.visible = false;
 
-        CreateLevel(1);
+        CreateLevel();
 
         player = new Player(startLives);
 
@@ -125,7 +128,7 @@ public class GameManager : MonoBehaviour {
         {
             audioPlayer.clip = ballLost;
             audioPlayer.Play();
-            Destroy(carete);
+            Destroy(carete, audioPlayer.clip.length);
         }
 
         if (player.Balls == 0 && player.Lives > 0)
@@ -162,6 +165,8 @@ public class GameManager : MonoBehaviour {
     }
     private void LevelCompleted()
     {
+        round++;
+
         GameObject[] collection = GameObject.FindGameObjectsWithTag("Ball");
         foreach (GameObject ball in collection)
         {
@@ -169,7 +174,19 @@ public class GameManager : MonoBehaviour {
         }
         Destroy(carete);
         InfoPanel.GetComponentInChildren<Text>().text = "Level Completed!";
+
+        //gameMode = GameMode.LEVELFINISHED;
         InfoPanel.SetActive(true);
+
+        if (round > MAX_ROUND)
+        {
+
+        }
+        else
+        {
+            CreateLevel();
+        }
+
     }
 
     private void GameOver()
@@ -184,23 +201,15 @@ public class GameManager : MonoBehaviour {
         UiScores.text = "Score\n" + this.score.ToString();
     }
 
-    private void CreateLevel(int level)
+    private void CreateLevel()
     {
-        for (int x = -5; x <= 5; x++)
+        switch (GameManager.round)
         {
-            Instantiate(cell_gray, new Vector3((float)x, -1f, 0), Quaternion.identity, levelHandler);
-            cellCount++;
-            Instantiate(cell_red, new Vector3((float)x, -1.5f, 0), Quaternion.identity, levelHandler);
-            cellCount++;
-            Instantiate(cell_magenta, new Vector3((float)x, -2f, 0), Quaternion.identity, levelHandler);
-            cellCount++;
-            Instantiate(cell_yellow, new Vector3((float)x, -2.5f, 0), Quaternion.identity, levelHandler);
-            cellCount++;
-            Instantiate(cell_blue, new Vector3((float)x, -3f, 0), Quaternion.identity, levelHandler);
-            cellCount++;
-            Instantiate(cell_green, new Vector3((float)x, -3.5f, 0), Quaternion.identity, levelHandler);
-            cellCount++;
+            case 1: Level_02(); break;
+            case 2: Level_02(); break;
+            default:            break;
         }
+        gameMode = GameMode.PLAYING;
         audioPlayer.clip = newLevel;
         audioPlayer.Play();
     }
@@ -249,7 +258,8 @@ public class GameManager : MonoBehaviour {
     {
         ClearLevel();
         cellCount = 0;
-        CreateLevel(1);
+        GameManager.round = 1;
+        CreateLevel();
         GameOverMenu.SetActive(false);
         Cursor.visible = false;
         PlayerAtInitialPosition();
@@ -264,6 +274,108 @@ public class GameManager : MonoBehaviour {
         for (int i = 0; i < levelHandler.childCount; i++)
         {
             Destroy(levelHandler.GetChild(i).gameObject);
+        }
+    }
+
+    private void Level_01()
+    {
+        for (int x = -5; x <= 5; x++)
+        {
+            Instantiate(cell_gray, new Vector3((float)x, -1f, 0), Quaternion.identity, levelHandler);
+            cellCount++;
+            Instantiate(cell_red, new Vector3((float)x, -1.5f, 0), Quaternion.identity, levelHandler);
+            cellCount++;
+            Instantiate(cell_magenta, new Vector3((float)x, -2f, 0), Quaternion.identity, levelHandler);
+            cellCount++;
+            Instantiate(cell_yellow, new Vector3((float)x, -2.5f, 0), Quaternion.identity, levelHandler);
+            cellCount++;
+            Instantiate(cell_blue, new Vector3((float)x, -3f, 0), Quaternion.identity, levelHandler);
+            cellCount++;
+            Instantiate(cell_green, new Vector3((float)x, -3.5f, 0), Quaternion.identity, levelHandler);
+            cellCount++;
+        }
+    }
+
+    private void Level_02()
+    {
+        for (int y = -1; y > -6; y--)
+        {
+            Instantiate(cell_yellow, new Vector3(-5, y, 0), Quaternion.identity, levelHandler);
+            Instantiate(cell_yellow, new Vector3(-5, y - .5f, 0), Quaternion.identity, levelHandler);
+            cellCount += 2;
+        }
+
+        Instantiate(cell_blue, new Vector3(-4f, -1.5f, 0), Quaternion.identity, levelHandler);
+        cellCount++;
+        for (int y = -2; y > -6; y--)
+        {
+            Instantiate(cell_blue, new Vector3(-4f, y, 0), Quaternion.identity, levelHandler);
+            Instantiate(cell_blue, new Vector3(-4f, y - .5f, 0), Quaternion.identity, levelHandler);
+            cellCount += 2;
+        }
+
+        for (int y = -2; y > -6; y--)
+        {
+            Instantiate(cell_green, new Vector3(-3, y, 0), Quaternion.identity, levelHandler);
+            Instantiate(cell_green, new Vector3(-3, y - .5f, 0), Quaternion.identity, levelHandler);
+            cellCount += 2;
+        }
+
+        Instantiate(cell_magenta, new Vector3(-2f, -2.5f, 0), Quaternion.identity, levelHandler);
+        cellCount++;
+        for (int y = -3; y > -6; y--)
+        {
+            Instantiate(cell_magenta, new Vector3(-2f, y, 0), Quaternion.identity, levelHandler);
+            Instantiate(cell_magenta, new Vector3(-2f, y - .5f, 0), Quaternion.identity, levelHandler);
+            cellCount += 2;
+        }
+
+        for (int y = -3; y > -6; y--)
+        {
+            Instantiate(cell_red, new Vector3(-1, y, 0), Quaternion.identity, levelHandler);
+            Instantiate(cell_red, new Vector3(-1, y - .5f, 0), Quaternion.identity, levelHandler);
+            cellCount += 2;
+        }
+
+        Instantiate(cell_yellow, new Vector3(0f, -3.5f, 0), Quaternion.identity, levelHandler);
+        cellCount++;
+        for (int y = -4; y > -6; y--)
+        {
+            Instantiate(cell_yellow, new Vector3(0f, y, 0), Quaternion.identity, levelHandler);
+            Instantiate(cell_yellow, new Vector3(0f, y - .5f, 0), Quaternion.identity, levelHandler);
+            cellCount += 2;
+        }
+
+        for (int y = -4; y > -6; y--)
+        {
+            Instantiate(cell_blue, new Vector3(1, y, 0), Quaternion.identity, levelHandler);
+            Instantiate(cell_blue, new Vector3(1, y - .5f, 0), Quaternion.identity, levelHandler);
+            cellCount += 2;
+        }
+
+        Instantiate(cell_green, new Vector3(2, -4.5f, 0), Quaternion.identity, levelHandler);
+        cellCount++;
+        for (int y = -5; y > -6; y--)
+        {
+            Instantiate(cell_green, new Vector3(2, y, 0), Quaternion.identity, levelHandler);
+            Instantiate(cell_green, new Vector3(2, y - .5f, 0), Quaternion.identity, levelHandler);
+            cellCount += 2;
+        }
+
+        for (int y = -5; y > -6; y--)
+        {
+            Instantiate(cell_magenta, new Vector3(3, y, 0), Quaternion.identity, levelHandler);
+            Instantiate(cell_magenta, new Vector3(3, y - .5f, 0), Quaternion.identity, levelHandler);
+            cellCount += 2;
+        }
+
+        Instantiate(cell_red, new Vector3(4, -5.5f, 0), Quaternion.identity, levelHandler);
+        cellCount++;
+
+        for (int x = -5; x <= 5; x++)
+        {
+            Instantiate(cell_gray, new Vector3((float)x, -6f, 0), Quaternion.identity, levelHandler);
+            cellCount++;
         }
     }
 }

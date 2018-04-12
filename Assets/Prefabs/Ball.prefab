@@ -171,6 +171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b330160cfde83814bb9991d2ab448883, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  soundPrefab: {fileID: 1476104223507988, guid: 00813bf0a09bd4247aaacfc0cb20a9ae,
+    type: 2}
 --- !u!212 &212513958469871810
 SpriteRenderer:
   m_ObjectHideFlags: 1
