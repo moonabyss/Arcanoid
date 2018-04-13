@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BonusSize : MonoBehaviour {
 
-    private const float bonusDuration = 5f;
+    private const float bonusDuration = 10f;
 
     IEnumerator IIncreaseSize()
     {

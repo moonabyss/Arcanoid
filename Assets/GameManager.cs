@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public enum GameMode { PLAYING, GAMEOVER, LEVEL_FINISHED, BALL_LOST}
+public enum GameMode { STARTING, PLAYING, GAMEOVER, LEVEL_FINISHED, BALL_LOST}
 
 public class GameManager : MonoBehaviour {
 
@@ -16,8 +16,6 @@ public class GameManager : MonoBehaviour {
 
     public bool InPause { get; private set; }
 
-    //public Texture2D cursor;
-    public GameObject cursor;
     public GameObject cell_blue;
     public GameObject cell_yellow;
     public GameObject cell_green;
@@ -31,6 +29,8 @@ public class GameManager : MonoBehaviour {
     public Text UiRound;
     public GameObject PauseMenu;
     public GameObject GameOverMenu;
+    public Text GameOverScore;
+    public Text GameOverHiScore;
     public Transform levelHandler;
     public GameObject[] bonuses;
 
@@ -63,6 +63,8 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        //PlayerPrefs.DeleteAll();
+
         Button[] buttons = PauseMenu.GetComponentsInChildren<Button>();
         foreach (Button button in buttons)
         {
@@ -97,7 +99,7 @@ public class GameManager : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-        if (Input.GetKeyDown("escape"))
+        if (Input.GetKeyDown("escape") && gameMode == GameMode.PLAYING)
         {
             SwitchPause();
         }
@@ -106,12 +108,6 @@ public class GameManager : MonoBehaviour {
     public static GameMode GetGameMode()
     {
         return gameMode;
-    }
-
-    public void ShowCursor(bool mode)
-    {
-        //cursor.SetActive(mode);
-        cursor.SetActive(false);
     }
 
     private void PlayersLivesChanged()
@@ -131,6 +127,8 @@ public class GameManager : MonoBehaviour {
         if (player.Balls == 0 && player.Lives > 0)
         {
             Invoke("PlayerAtInitialPosition", 2f);
+            Invoke("ShowReady", 2f);
+            Invoke("HideRound", 5f);
             player.BallAdded(1);
         }
 
@@ -148,21 +146,21 @@ public class GameManager : MonoBehaviour {
     private void PlayerAtInitialPosition()
     {
         carete =  Instantiate(caretePrefab, new Vector3(0, -11, 0), Quaternion.identity);
-        Invoke("SetGameModePlaying", 1f);
-        //ShowCursor(true);
     }
 
     private void CellDestroyed(int score, Transform position)
     {
         cellCount--;
         ScoreChanged(score);
-        ScoreAdd go =  Instantiate(addScorePrefab, position.position + new Vector3(0, 0, -1), Quaternion.identity);
+        ScoreAdd go =  Instantiate(addScorePrefab, position.position + new Vector3(0, 0, -1), Quaternion.identity, levelHandler);
         go.scoreText.text = GetSign(score) + score.ToString();
 
+        Random.InitState(System.DateTime.Now.Millisecond);
         float chance = Random.Range(0, 100);
-        if (chance < 100)
+        if (chance < 20)
         {
-            Instantiate(bonuses[(int)Random.Range(0, bonuses.Length - 1)], position.position + new Vector3(0, 0, -1), Quaternion.identity);
+            Random.InitState(System.DateTime.Now.Millisecond);
+            Instantiate(bonuses[(int)(Random.value * 100) % bonuses.Length], position.position + new Vector3(0, 0, -1), Quaternion.identity, levelHandler);
         }
 
         if (cellCount == 0)
@@ -175,9 +173,14 @@ public class GameManager : MonoBehaviour {
         round++;
 
         GameObject[] collection = GameObject.FindGameObjectsWithTag("Ball");
-        foreach (GameObject ball in collection)
+        foreach (GameObject go in collection)
         {
-            Destroy(ball);
+            Destroy(go);
+        }
+        collection = GameObject.FindGameObjectsWithTag("Bonus");
+        foreach (GameObject go in collection)
+        {
+            Destroy(go);
         }
         Destroy(carete);
 
@@ -195,6 +198,27 @@ public class GameManager : MonoBehaviour {
 
     private void GameOver()
     {
+        int hiScore = 0;
+        if (!PlayerPrefs.HasKey("hiscore"))
+        {
+            hiScore = score;
+            PlayerPrefs.SetInt("hiscore", hiScore);
+        }
+        else
+        {
+            if (PlayerPrefs.GetInt("hiscore") > score)
+            {
+                hiScore = PlayerPrefs.GetInt("hiscore");
+            }
+            else
+            {
+                PlayerPrefs.SetInt("hiscore", hiScore);
+                hiScore = score;
+            }
+        }
+
+        GameOverScore.text = "Score: " + score;
+        GameOverHiScore.text = "HiScore: " + hiScore;
         GameOverMenu.SetActive(true);
         Cursor.visible = true;
     }
@@ -214,7 +238,6 @@ public class GameManager : MonoBehaviour {
             default:            break;
         }
         ShowRound();
-        gameMode = GameMode.PLAYING;
         GameObject sound = Instantiate(soundPrefab, transform);
         sound.GetComponent<AudioSource>().clip = newLevel;
         sound.GetComponent<AudioSource>().Play();
@@ -273,9 +296,16 @@ public class GameManager : MonoBehaviour {
         UiRound.gameObject.SetActive(true);
     }
 
+    private void ShowReady()
+    {
+        UiRound.text = "READY";
+        UiRound.gameObject.SetActive(true);
+    }
+
     private void HideRound()
     {
         UiRound.gameObject.SetActive(false);
+        SetGameModePlaying();
     }
 
     private void PlayNewGame()
@@ -291,7 +321,6 @@ public class GameManager : MonoBehaviour {
         player.AddLife(startLives);
         score = 0;
         ScoreChanged(score);
-        gameMode = GameMode.PLAYING;
     }
 
     private void ClearLevel()
@@ -406,10 +435,10 @@ public class GameManager : MonoBehaviour {
 
     private void Level_00()
     {
-        for (int x = -1; x <= -1; x++)
+        for (int x = -5; x <= 5; x++)
         {
             Instantiate(cell_green, new Vector3((float)x, -3.5f, 0), Quaternion.identity, levelHandler);
-            cellCount++;
         }
+        cellCount++;
     }
 }

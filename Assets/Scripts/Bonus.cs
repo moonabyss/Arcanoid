@@ -25,7 +25,7 @@ public class Bonus : MonoBehaviour {
         {
             Destroy(gameObject);
         }
-        else if (collision.collider.tag == "Player")
+        else if (collision.collider.tag == "Player" && GameManager.GetGameMode() == GameMode.PLAYING)
         {
             Action();
         }
