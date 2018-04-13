@@ -82,6 +82,9 @@
     <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\Scripts\AudioHandler.cs" />
     <Compile Include="Assets\Scripts\Ball.cs" />
+    <Compile Include="Assets\Scripts\Bonus.cs" />
+    <Compile Include="Assets\Scripts\Bonus_long.cs" />
+    <Compile Include="Assets\Scripts\BonusSize.cs" />
     <Compile Include="Assets\Scripts\Carete.cs" />
     <Compile Include="Assets\Scripts\Cell.cs" />
     <Compile Include="Assets\Scripts\Floor.cs" />

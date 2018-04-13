@@ -16,8 +16,7 @@ public class Movement : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        maxX = rightWall - GetComponent<SpriteRenderer>().bounds.size.x / 2;
-        minX = leftWall + GetComponent<SpriteRenderer>().bounds.size.x / 2;
+        GetBounce();
     }
 
     private void Update()
@@ -34,6 +33,16 @@ public class Movement : MonoBehaviour {
             transform.position = playerPosition;
         }
         lastMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    }
+
+    public void GetBounce()
+    {
+        maxX = rightWall - GetComponent<SpriteRenderer>().bounds.size.x / 2;
+        minX = leftWall + GetComponent<SpriteRenderer>().bounds.size.x / 2;
+
+        Vector3 playerPosition = transform.position;
+        playerPosition.x = Mathf.Clamp(playerPosition.x, minX, maxX);
+        transform.position = playerPosition;
     }
 
 }

@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour {
     public GameObject PauseMenu;
     public GameObject GameOverMenu;
     public Transform levelHandler;
+    public GameObject[] bonuses;
 
     public int startLives = 3;
 
@@ -130,6 +131,7 @@ public class GameManager : MonoBehaviour {
         if (player.Balls == 0 && player.Lives > 0)
         {
             Invoke("PlayerAtInitialPosition", 2f);
+            player.BallAdded(1);
         }
 
         if (player.Balls == 0 && player.Lives == 0)
@@ -146,7 +148,6 @@ public class GameManager : MonoBehaviour {
     private void PlayerAtInitialPosition()
     {
         carete =  Instantiate(caretePrefab, new Vector3(0, -11, 0), Quaternion.identity);
-        player.BallAdded(1);
         Invoke("SetGameModePlaying", 1f);
         //ShowCursor(true);
     }
@@ -157,6 +158,13 @@ public class GameManager : MonoBehaviour {
         ScoreChanged(score);
         ScoreAdd go =  Instantiate(addScorePrefab, position.position + new Vector3(0, 0, -1), Quaternion.identity);
         go.scoreText.text = GetSign(score) + score.ToString();
+
+        float chance = Random.Range(0, 100);
+        if (chance < 100)
+        {
+            Instantiate(bonuses[(int)Random.Range(0, bonuses.Length - 1)], position.position + new Vector3(0, 0, -1), Quaternion.identity);
+        }
+
         if (cellCount == 0)
         {
             LevelCompleted();
@@ -180,6 +188,7 @@ public class GameManager : MonoBehaviour {
         else
         {
             CreateLevel();
+            PlayerAtInitialPosition();
         }
 
     }
@@ -278,6 +287,7 @@ public class GameManager : MonoBehaviour {
         GameOverMenu.SetActive(false);
         Cursor.visible = false;
         PlayerAtInitialPosition();
+        player.BallAdded(1);
         player.AddLife(startLives);
         score = 0;
         ScoreChanged(score);
@@ -390,6 +400,15 @@ public class GameManager : MonoBehaviour {
         for (int x = -5; x <= 5; x++)
         {
             Instantiate(cell_gray, new Vector3((float)x, -6f, 0), Quaternion.identity, levelHandler);
+            cellCount++;
+        }
+    }
+
+    private void Level_00()
+    {
+        for (int x = -1; x <= -1; x++)
+        {
+            Instantiate(cell_green, new Vector3((float)x, -3.5f, 0), Quaternion.identity, levelHandler);
             cellCount++;
         }
     }

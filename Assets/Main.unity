@@ -325,7 +325,7 @@ GameObject:
   - component: {fileID: 146414010}
   - component: {fileID: 146414012}
   - component: {fileID: 146414011}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Floor
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -339,7 +339,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 146414009}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.6449113, y: -5.53, z: -0.0234375}
+  m_LocalPosition: {x: 0.6449113, y: -5.53, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 914797305}
@@ -1076,7 +1076,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 49405164}
   m_HandleRect: {fileID: 1094630097}
   m_Direction: 0
-  m_MinValue: -80
+  m_MinValue: -60
   m_MaxValue: 0
   m_WholeNumbers: 0
   m_Value: 0
@@ -1787,7 +1787,7 @@ MonoBehaviour:
   m_FillRect: {fileID: 30110369}
   m_HandleRect: {fileID: 1365640018}
   m_Direction: 0
-  m_MinValue: -80
+  m_MinValue: -60
   m_MaxValue: 0
   m_WholeNumbers: 0
   m_Value: 0
@@ -3882,6 +3882,8 @@ MonoBehaviour:
   PauseMenu: {fileID: 198263794}
   GameOverMenu: {fileID: 1151487508}
   levelHandler: {fileID: 926338152}
+  bonuses:
+  - {fileID: 1942326196119694, guid: e44b3b790d0b46641b8fe57cc44b2471, type: 2}
   startLives: 3
   ballLost: {fileID: 8300000, guid: 18a0b0282c1ba1440bec13bda2eb8882, type: 3}
   gameOver: {fileID: 8300000, guid: d798954502e90ee49a3b8944f3365cfa, type: 3}

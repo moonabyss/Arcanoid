@@ -28,7 +28,7 @@ public class Carete : MonoBehaviour {
     {
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
-            if (rb.velocity == Vector2.zero)
+            if (GameManager.GetGameMode() == GameMode.PLAYING && rb.velocity == Vector2.zero)
             {
                 /*
                 float angle = Vector2.Angle(Camera.main.ScreenToWorldPoint(Input.mousePosition) - ball.transform.position, new Vector2(1, 0));
