@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour {
 
     private void PlayersLivesChanged()
     {
-        UiLives.text = "Life\n" + player.Lives;
+        UiLives.text = "Lives\n" + player.Lives;
 
         if (player.Balls == 0)
         {
